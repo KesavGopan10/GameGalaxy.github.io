@@ -1,0 +1,32 @@
+nav {
+    background-color: rgba(0, 0, 0, 0.918);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    flex-wrap: nowrap;
+    flex-direction: column; /* Ensuring content is in a row */
+    
+}
+
+ul {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    margin: 0;
+    padding: 0;text-decoration: none;
+}
+li {
+    list-style-type: none;
+    text-decoration: none;
+    margin: 0.5rem;
+}
+li a {
+    text-decoration: none;
+    color: white;
+}

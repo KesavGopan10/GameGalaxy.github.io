@@ -1,0 +1,15 @@
+.parallax-container {
+    height: 100%; /* Adjust as needed */
+    overflow: hidden;
+    position: relative;
+    background-color: black;
+  }
+  
+  .parallax-content {
+    position: absolute;
+    top: 50%; /* Adjust as needed */
+    left: 50%; /* Adjust as needed */
+    transform: translate(-50%, -50%);
+    /* Additional styling for your content */
+  }
+  

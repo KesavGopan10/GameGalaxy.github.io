@@ -1,0 +1,58 @@
+.glassmorphism-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(0px);
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative; /* Add position relative to the card */
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  height: 500px;
+  width: 480px;
+}
+icon {
+  width: 20px;
+  height: 20px;
+  fill: white;
+  margin-right: 5px;
+  filter: invert(1);
+  outline: 2px solid rgb(0, 0, 0);
+}
+.glassmorphism-card:hover {
+  backdrop-filter: blur(10px);
+}
+
+.img1{
+  filter: blur(0px); /* Blur the image */
+  width: 95%; 
+  height: 95%; 
+  border-radius: 10px; 
+}
+.glassmorphism-card>.img1:hover{
+  transform: scale(0.9);
+  width: 100%; /* Ensure image covers the entire card */
+  border-radius: 10px;
+  
+}
+.play {
+  background-color: blue;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;  
+  border-radius: 5px;
+  border: none;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Center the button */
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: none;
+}
+
+.glassmorphism-card:hover .play {
+  display: block;
+}

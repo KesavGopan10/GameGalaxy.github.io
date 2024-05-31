@@ -1,0 +1,28 @@
+/* three.css */
+.glassmorphism-background {
+    position: relative; /* Ensure positioning context for absolute positioning */
+    background: none; /* Background color with transparency */
+    backdrop-filter: blur(0px); /* Apply blur effect */
+    border-radius: 10px; /* Rounded corners for the glass effect */
+    padding: 20px; /* Add some padding */
+    z-index: 0; /* Ensure the glass effect is behind the content */
+    box-shadow: 0 0 0px rgba(0, 0, 0, 0.1); /* Add a drop shadow */
+    border: 0px solid rgba(0, 0, 0, 0.1); /* Add a border */
+    transition: all 0.3s ease; /* Add a smooth transition */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .glassmorphism-background::before {
+    content: "";
+    position: absolute; /* Absolute positioning */
+    top: 0; /* Position at the top */
+    left: 0; /* Position at the left */
+    right: 0; /* Position at the right */
+    bottom: 0; /* Position at the bottom */
+    background: none; /* Background color with transparency */      
+    backdrop-filter: blur(5px); /* Apply blur effect */
+    border-radius: 10px; /* Rounded corners for the glass effect */
+    z-index: -1; /* Ensure the glass effect is behind the content */
+  }

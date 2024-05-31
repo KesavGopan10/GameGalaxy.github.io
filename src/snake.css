@@ -1,0 +1,92 @@
+/* snake.css */
+
+.game-container{
+  width: 30px;
+  height:50px;
+}
+.snake-container {
+    background-color: rgba(194, 11, 11, 0.8); /* Semi-transparent background */
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-direction: column;
+    border-radius: 5px;
+    max-width: 600px;
+    box-shadow: 3 0 10px rgba(218, 201, 201, 0.2); /* Box shadow for glass effect */
+}
+
+.snake-board {
+    
+    background-color: #fff;
+    border: 1px solid #837373;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(218, 201, 201, 0.2); /* Box shadow for glass effect */
+}
+
+.snake-board-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.snake-board-cell {
+    width: 10px;
+    height: 20px;
+    margin: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 23px;
+}
+
+.snake-segment {
+    box-sizing: border-box;
+    background-color: #b2b5b2;
+    border: 1px solid #003300;
+}
+
+.food {
+    box-sizing: border-box;
+    background-color: #ff4444;
+    border: 1px solid #660000;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 10px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+}
+
+button:hover {
+    background-color: #218838;
+}
+
+button:active {
+    background-color: #1e7e34;
+}
+
+button:focus {
+    outline: none;
+}
+
+p {
+    color: #ded2d2;
+}
+
+.game-over-message {
+    color: #d9534f;
+    font-size: 24px;
+    margin-top: 20px;
+}

@@ -1,0 +1,70 @@
+body{
+    z-index: 2;
+}
+
+.space-game {
+  text-align: center;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.game-area {
+  position: relative;
+  width: 80hh;
+  height: 90vh;
+  background-image: url('https://i.pinimg.com/originals/ce/26/c5/ce26c5aefbe7b96334567bdaf211c300.jpg'); /* Correctly reference your image file */
+  background-size: contain; /* Ensure the background image covers the entire area */
+  background-position: center; /* Center the background image */
+  overflow: hidden;
+  border: 2px solid white;
+  margin-top: 20px;
+}
+
+.ship {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  translate: -10px;
+}
+
+.bullet {
+  position: absolute;
+  width: 5px;
+  height: 10px;
+  background: yellow;
+  border-radius: 2px;
+}
+
+.enemy {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  margin-top: 20px;
+  cursor: pointer;
+  border: none;
+  background-color: #4CAF50;
+  color: white;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.dialog-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(18, 14, 14);
+  color: rgb(255, 255, 255);
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 1;
+}
