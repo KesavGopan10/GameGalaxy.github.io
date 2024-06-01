@@ -179,11 +179,11 @@ const SnakeGame = () => {
 
     return (
         <div className="game-container">
-            {gameOver && (
-                <div style={{ color: "red", marginTop: "10px" }}>
-                    Game Over! Your score was: {score}
-                </div>
-            )}
+            // {gameOver && (
+            //     <div style={{ color: "red", marginTop: "10px" }}>
+            //         Game Over! Your score was: {score}
+            //     </div>
+            // )}
             <div style={{ marginTop: "20px" }}>
                 {!isGameStarted && !gameOver && (
                     <button onClick={startGame}>Start Game</button>
@@ -229,13 +229,23 @@ const SnakeGame = () => {
                 />
             </div>
 
-            <div className="controls">
-                <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
-                <div>
-                    <button onClick={() => handleDirectionChange(Direction.LEFT)} style={{ marginRight: "10px" }}>Left</button>
+           <div className="controls">
+                <div className="controls-row">
+                    <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
+                </div>
+                <div className="controls-row">
+                    <button onClick={() => handleDirectionChange(Direction.LEFT)}>Left</button>
+                    {isGameStarted || gameOver ? (
+                        <button onClick={resetGame}>Reset Game</button>
+                    ) : (
+                        <button onClick={startGame}>Start Game</button>
+                    )}
                     <button onClick={() => handleDirectionChange(Direction.RIGHT)}>Right</button>
                 </div>
-                <button onClick={() => handleDirectionChange(Direction.DOWN)} style={{ marginTop: "10px" }}>Down</button>
+                <div className="controls-row">
+                    <button onClick={() => handleDirectionChange(Direction.DOWN)}>Down</button>
+                </div>
+                <p>Score: {score}</p>
             </div>
         </div>
     );
