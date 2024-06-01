@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./snake.css";
-
-const ROWS = 20;
-const COLS = 20;
-const CELL_SIZE = 20;
+import eatSound from "./sounds/eat.mp3";
+import gameOverSound from "./sounds/over.wav";
 
 const Direction = {
     UP: "UP",
@@ -12,12 +10,12 @@ const Direction = {
     RIGHT: "RIGHT",
 };
 
-const getRandomCoordinate = (exclude = []) => {
+const getRandomCoordinate = (exclude = [], cols, rows) => {
     let coord;
     do {
         coord = {
-            x: Math.floor(Math.random() * COLS),
-            y: Math.floor(Math.random() * ROWS),
+            x: Math.floor(Math.random() * cols),
+            y: Math.floor(Math.random() * rows),
         };
     } while (exclude.some((segment) => segment.x === coord.x && segment.y === coord.y));
     return coord;
@@ -29,12 +27,16 @@ const SnakeGame = () => {
         { x: 10, y: 11 },
     ]);
     const [direction, setDirection] = useState(Direction.RIGHT);
-    const [food, setFood] = useState(getRandomCoordinate(snake));
+    const [food, setFood] = useState(getRandomCoordinate(snake, 20, 20));
     const [isGameStarted, setIsGameStarted] = useState(false);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
-    const [speed, setSpeed] = useState(150);
+    const [cellSize, setCellSize] = useState(20);
+    const [rows, setRows] = useState(20);
+    const [cols, setCols] = useState(20);
     const gameContainerRef = useRef(null);
+    const eatSoundRef = useRef(new Audio(eatSound));
+    const gameOverSoundRef = useRef(new Audio(gameOverSound));
 
     const handleKeyDown = (e) => {
         if (isGameStarted && !gameOver) {
@@ -58,11 +60,26 @@ const SnakeGame = () => {
     };
 
     useEffect(() => {
+        const handleResize = () => {
+            const gameContainer = gameContainerRef.current;
+            if (gameContainer) {
+                const { clientWidth, clientHeight } = gameContainer;
+                const newCellSize = Math.min(clientWidth / cols, clientHeight / rows);
+                setCellSize(newCellSize);
+            }
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, [cols, rows]);
+
+    useEffect(() => {
         if (isGameStarted) {
-            const interval = setInterval(() => moveSnake(), speed);
+            const interval = setInterval(() => moveSnake(), 150);
             return () => clearInterval(interval);
         }
-    }, [snake, isGameStarted, direction, speed]);
+    }, [snake, isGameStarted, direction]);
 
     useEffect(() => {
         gameContainerRef.current?.focus();
@@ -95,24 +112,25 @@ const SnakeGame = () => {
 
         if (
             newHead.x < 0 ||
-            newHead.x >= COLS ||
+            newHead.x >= cols ||
             newHead.y < 0 ||
-            newHead.y >= ROWS ||
+            newHead.y >= rows ||
             newSnake.slice(1).some(
                 (segment) => segment.x === newHead.x && segment.y === newHead.y
             )
         ) {
             setGameOver(true);
             setIsGameStarted(false);
+            gameOverSoundRef.current.play();
             return;
         }
 
         newSnake.unshift(newHead);
 
         if (newHead.x === food.x && newHead.y === food.y) {
-            setFood(getRandomCoordinate(newSnake));
+            setFood(getRandomCoordinate(newSnake, cols, rows));
             setScore(score + 1);
-            setSpeed((prevSpeed) => Math.max(prevSpeed - 5, 50)); // Increase speed
+            eatSoundRef.current.play();
         } else {
             newSnake.pop();
         }
@@ -131,8 +149,7 @@ const SnakeGame = () => {
         setFood(getRandomCoordinate([
             { x: 10, y: 10 },
             { x: 10, y: 11 },
-        ]));
-        setSpeed(150); // Reset speed
+        ], cols, rows));
     };
 
     const resetGame = () => {
@@ -142,9 +159,8 @@ const SnakeGame = () => {
             { x: 10, y: 10 },
             { x: 10, y: 11 },
         ]);
-        setFood(getRandomCoordinate(snake));
+        setFood(getRandomCoordinate(snake, cols, rows));
         setScore(0);
-        setSpeed(150); // Reset speed
     };
 
     const handleDirectionChange = (newDirection) => {
@@ -162,22 +178,7 @@ const SnakeGame = () => {
     };
 
     return (
-        <div
-            className="game-container"
-            style={{
-                width: "100vw",
-                height: "100vh",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                color: "white",
-                padding: "30px",
-                borderRadius: "20px",
-                boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
-            }}
-        >
+        <div className="game-container">
             {gameOver && (
                 <div style={{ color: "red", marginTop: "10px" }}>
                     Game Over! Your score was: {score}
@@ -197,8 +198,8 @@ const SnakeGame = () => {
                 tabIndex={0}
                 onKeyDown={handleKeyDown}
                 style={{
-                    width: COLS * CELL_SIZE,
-                    height: ROWS * CELL_SIZE,
+                    width: "100%",
+                    height: `${rows * cellSize}px`,
                     position: "relative",
                     overflow: "hidden",
                     outline: "solid 6px blue",
@@ -210,33 +211,27 @@ const SnakeGame = () => {
                         key={index}
                         className="snake-segment"
                         style={{
-                            position: "absolute",
-                            top: segment.y * CELL_SIZE,
-                            left: segment.x * CELL_SIZE,
-                            width: CELL_SIZE,
-                            height: CELL_SIZE,
-                            backgroundColor: "green",
-                            borderRadius: "4px",
+                            top: segment.y * cellSize,
+                            left: segment.x * cellSize,
+                            width: cellSize,
+                            height: cellSize,
                         }}
                     />
                 ))}
                 <div
                     className="food"
                     style={{
-                        position: "absolute",
-                        top: food.y * CELL_SIZE,
-                        left: food.x * CELL_SIZE,
-                        width: CELL_SIZE,
-                        height: CELL_SIZE,
-                        backgroundColor: "red",
-                        borderRadius: "50%",
+                        top: food.y * cellSize,
+                        left: food.x * cellSize,
+                        width: cellSize,
+                        height: cellSize,
                     }}
                 />
             </div>
-            
-            <div className="controls" style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+
+            <div className="controls">
                 <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
-                <div style={{ display: "flex", justifyContent: "center" }}>
+                <div>
                     <button onClick={() => handleDirectionChange(Direction.LEFT)} style={{ marginRight: "10px" }}>Left</button>
                     <button onClick={() => handleDirectionChange(Direction.RIGHT)}>Right</button>
                 </div>
