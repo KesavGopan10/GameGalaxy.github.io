@@ -56,3 +56,34 @@ icon {
 .glassmorphism-card:hover .play {
   display: block;
 }
+.glassmorphism-card {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  padding: 10px;
+}
+
+.img-fluid {
+  width: 100%;
+  height: auto;
+}
+
+.play {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+@media (max-width: 767px) {
+  .glassmorphism-card {
+    margin: 0 auto;
+    width: 90%;
+  }
+
+  .play {
+    width: 100%;
+    margin-top: 10px;
+  }
+}
