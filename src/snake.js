@@ -23,7 +23,7 @@ const getRandomCoordinate = (exclude = []) => {
     return coord;
 };
 
-const Snakegame = () => {
+const SnakeGame = () => {
     const [snake, setSnake] = useState([
         { x: 10, y: 10 },
         { x: 10, y: 11 },
@@ -58,7 +58,7 @@ const Snakegame = () => {
 
     useEffect(() => {
         if (isGameStarted) {
-            const interval = setInterval(() => moveSnake(), 100);
+            const interval = setInterval(() => moveSnake(), 150); // Slow down the game for better control
             return () => clearInterval(interval);
         }
     }, [snake, isGameStarted, direction]);
@@ -127,7 +127,10 @@ const Snakegame = () => {
             { x: 10, y: 10 },
             { x: 10, y: 11 },
         ]);
-        setFood(getRandomCoordinate(snake));
+        setFood(getRandomCoordinate([
+            { x: 10, y: 10 },
+            { x: 10, y: 11 },
+        ]));
     };
 
     const resetGame = () => {
@@ -141,13 +144,27 @@ const Snakegame = () => {
         setScore(0);
     };
 
+    const handleDirectionChange = (newDirection) => {
+        if (!gameOver && isGameStarted) {
+            if (newDirection === Direction.UP && direction !== Direction.DOWN) {
+                setDirection(Direction.UP);
+            } else if (newDirection === Direction.DOWN && direction !== Direction.UP) {
+                setDirection(Direction.DOWN);
+            } else if (newDirection === Direction.LEFT && direction !== Direction.RIGHT) {
+                setDirection(Direction.LEFT);
+            } else if (newDirection === Direction.RIGHT && direction !== Direction.LEFT) {
+                setDirection(Direction.RIGHT);
+            }
+        }
+    };
+
     return (
+        
         <div
             className="game-container"
             style={{
                 width: "100vw",
                 height: "100vh",
-                margin: "auto",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -159,6 +176,20 @@ const Snakegame = () => {
                 boxShadow: "0 0 20px rgba(0, 0, 0, 0.3)",
             }}
         >
+            {gameOver && (
+                <div style={{ color: "red", marginTop: "10px" }}>
+                    Game Over! Your score was: {score}
+                </div>
+            )}
+            <div style={{ marginTop: "20px" }}>
+                {!isGameStarted && !gameOver && (
+                    <button onClick={startGame}>Start Game</button>
+                )}
+                {(isGameStarted || gameOver) && (
+                    <button onClick={resetGame}>Reset Game</button>
+                )}
+                <p>Score: {score}</p>
+            </div>
             <div
                 ref={gameContainerRef}
                 tabIndex={0}
@@ -169,6 +200,7 @@ const Snakegame = () => {
                     position: "relative",
                     overflow: "hidden",
                     outline: "solid 6px blue",
+                    backgroundColor: "black", // Ensuring game area is visible
                 }}
             >
                 {snake.map((segment, index) => (
@@ -197,22 +229,17 @@ const Snakegame = () => {
                     }}
                 />
             </div>
-            {gameOver && (
-                <div style={{ color: "red", marginTop: "10px" }}>
-                    Game Over! Your score was: {score}
+            
+            <div className="controls">
+                <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
+                <div>
+                    <button onClick={() => handleDirectionChange(Direction.LEFT)}>Left</button>
+                    <button onClick={() => handleDirectionChange(Direction.RIGHT)}>Right</button>
                 </div>
-            )}
-            <div style={{ marginTop: "20px" }}>
-                {!isGameStarted && !gameOver && (
-                    <button onClick={startGame}>Start Game</button>
-                )}
-                {(isGameStarted || gameOver) && (
-                    <button onClick={resetGame}>Reset Game</button>
-                )}
-                <p>Score: {score}</p>
+                <button onClick={() => handleDirectionChange(Direction.DOWN)}>Down</button>
             </div>
         </div>
     );
 };
 
-export default Snakegame;
+export default SnakeGame;
