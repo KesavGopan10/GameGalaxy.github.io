@@ -33,6 +33,7 @@ const SnakeGame = () => {
     const [isGameStarted, setIsGameStarted] = useState(false);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [speed, setSpeed] = useState(150);
     const gameContainerRef = useRef(null);
 
     const handleKeyDown = (e) => {
@@ -58,10 +59,10 @@ const SnakeGame = () => {
 
     useEffect(() => {
         if (isGameStarted) {
-            const interval = setInterval(() => moveSnake(), 150); // Slow down the game for better control
+            const interval = setInterval(() => moveSnake(), speed);
             return () => clearInterval(interval);
         }
-    }, [snake, isGameStarted, direction]);
+    }, [snake, isGameStarted, direction, speed]);
 
     useEffect(() => {
         gameContainerRef.current?.focus();
@@ -92,7 +93,6 @@ const SnakeGame = () => {
                 break;
         }
 
-        // Check collision with walls or itself
         if (
             newHead.x < 0 ||
             newHead.x >= COLS ||
@@ -112,6 +112,7 @@ const SnakeGame = () => {
         if (newHead.x === food.x && newHead.y === food.y) {
             setFood(getRandomCoordinate(newSnake));
             setScore(score + 1);
+            setSpeed((prevSpeed) => Math.max(prevSpeed - 5, 50)); // Increase speed
         } else {
             newSnake.pop();
         }
@@ -131,6 +132,7 @@ const SnakeGame = () => {
             { x: 10, y: 10 },
             { x: 10, y: 11 },
         ]));
+        setSpeed(150); // Reset speed
     };
 
     const resetGame = () => {
@@ -142,6 +144,7 @@ const SnakeGame = () => {
         ]);
         setFood(getRandomCoordinate(snake));
         setScore(0);
+        setSpeed(150); // Reset speed
     };
 
     const handleDirectionChange = (newDirection) => {
@@ -159,7 +162,6 @@ const SnakeGame = () => {
     };
 
     return (
-        
         <div
             className="game-container"
             style={{
@@ -169,7 +171,7 @@ const SnakeGame = () => {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 color: "white",
                 padding: "30px",
                 borderRadius: "20px",
@@ -200,7 +202,7 @@ const SnakeGame = () => {
                     position: "relative",
                     overflow: "hidden",
                     outline: "solid 6px blue",
-                    backgroundColor: "black", // Ensuring game area is visible
+                    backgroundColor: "black",
                 }}
             >
                 {snake.map((segment, index) => (
@@ -214,6 +216,7 @@ const SnakeGame = () => {
                             width: CELL_SIZE,
                             height: CELL_SIZE,
                             backgroundColor: "green",
+                            borderRadius: "4px",
                         }}
                     />
                 ))}
@@ -226,17 +229,18 @@ const SnakeGame = () => {
                         width: CELL_SIZE,
                         height: CELL_SIZE,
                         backgroundColor: "red",
+                        borderRadius: "50%",
                     }}
                 />
             </div>
             
-            <div className="controls">
+            <div className="controls" style={{ marginTop: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
                 <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
-                <div>
-                    <button onClick={() => handleDirectionChange(Direction.LEFT)}>Left</button>
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                    <button onClick={() => handleDirectionChange(Direction.LEFT)} style={{ marginRight: "10px" }}>Left</button>
                     <button onClick={() => handleDirectionChange(Direction.RIGHT)}>Right</button>
                 </div>
-                <button onClick={() => handleDirectionChange(Direction.DOWN)}>Down</button>
+                <button onClick={() => handleDirectionChange(Direction.DOWN)} style={{ marginTop: "10px" }}>Down</button>
             </div>
         </div>
     );
