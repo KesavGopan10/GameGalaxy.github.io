@@ -179,20 +179,7 @@ const SnakeGame = () => {
 
     return (
         <div className="game-container">
-            // {gameOver && (
-            //     <div style={{ color: "red", marginTop: "10px" }}>
-            //         Game Over! Your score was: {score}
-            //     </div>
-            // )}
-            // <div style={{ marginTop: "20px" }}>
-            //     {!isGameStarted && !gameOver && (
-            //         <button onClick={startGame}>Start Game</button>
-            //     )}
-            //     {(isGameStarted || gameOver) && (
-            //         <button onClick={resetGame}>Reset Game</button>
-            //     )}
-            //     <p>Score: {score}</p>
-            // </div>
+           
             <div
                 ref={gameContainerRef}
                 tabIndex={0}
