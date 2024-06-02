@@ -179,11 +179,7 @@ const SnakeGame = () => {
 
     return (
         <div className="game-container">
-           {gameOver && (
-                <div style={{ color: "red", marginTop: "10px" }}>
-                    Game Over! Your score was: {score}
-                </div>
-            )}
+
             <div
                 ref={gameContainerRef}
                 tabIndex={0}
