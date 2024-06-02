@@ -3,6 +3,10 @@ import "./snake.css";
 import eatSound from "./sounds/eat.mp3";
 import gameOverSound from "./sounds/over.wav";
 
+const ROWS = 20;
+const COLS = 20;
+const CELL_SIZE = 20;
+
 const Direction = {
     UP: "UP",
     DOWN: "DOWN",
@@ -10,12 +14,12 @@ const Direction = {
     RIGHT: "RIGHT",
 };
 
-const getRandomCoordinate = (exclude = [], cols, rows) => {
+const getRandomCoordinate = (exclude = []) => {
     let coord;
     do {
         coord = {
-            x: Math.floor(Math.random() * cols),
-            y: Math.floor(Math.random() * rows),
+            x: Math.floor(Math.random() * COLS),
+            y: Math.floor(Math.random() * ROWS),
         };
     } while (exclude.some((segment) => segment.x === coord.x && segment.y === coord.y));
     return coord;
@@ -27,13 +31,10 @@ const SnakeGame = () => {
         { x: 10, y: 11 },
     ]);
     const [direction, setDirection] = useState(Direction.RIGHT);
-    const [food, setFood] = useState(getRandomCoordinate(snake, 20, 20));
+    const [food, setFood] = useState(getRandomCoordinate(snake));
     const [isGameStarted, setIsGameStarted] = useState(false);
     const [score, setScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
-    const [cellSize, setCellSize] = useState(20);
-    const [rows, setRows] = useState(20);
-    const [cols, setCols] = useState(20);
     const gameContainerRef = useRef(null);
     const eatSoundRef = useRef(new Audio(eatSound));
     const gameOverSoundRef = useRef(new Audio(gameOverSound));
@@ -60,23 +61,8 @@ const SnakeGame = () => {
     };
 
     useEffect(() => {
-        const handleResize = () => {
-            const gameContainer = gameContainerRef.current;
-            if (gameContainer) {
-                const { clientWidth, clientHeight } = gameContainer;
-                const newCellSize = Math.min(clientWidth / cols, clientHeight / rows);
-                setCellSize(newCellSize);
-            }
-        };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, [cols, rows]);
-
-    useEffect(() => {
         if (isGameStarted) {
-            const interval = setInterval(() => moveSnake(), 180);
+            const interval = setInterval(() => moveSnake(), 150); // Slow down the game for better control
             return () => clearInterval(interval);
         }
     }, [snake, isGameStarted, direction]);
@@ -110,11 +96,12 @@ const SnakeGame = () => {
                 break;
         }
 
+        // Check collision with walls or itself
         if (
             newHead.x < 0 ||
-            newHead.x >= cols ||
+            newHead.x >= COLS ||
             newHead.y < 0 ||
-            newHead.y >= rows ||
+            newHead.y >= ROWS ||
             newSnake.slice(1).some(
                 (segment) => segment.x === newHead.x && segment.y === newHead.y
             )
@@ -128,7 +115,7 @@ const SnakeGame = () => {
         newSnake.unshift(newHead);
 
         if (newHead.x === food.x && newHead.y === food.y) {
-            setFood(getRandomCoordinate(newSnake, cols, rows));
+            setFood(getRandomCoordinate(newSnake));
             setScore(score + 1);
             eatSoundRef.current.play();
         } else {
@@ -146,10 +133,7 @@ const SnakeGame = () => {
             { x: 10, y: 10 },
             { x: 10, y: 11 },
         ]);
-        setFood(getRandomCoordinate([
-            { x: 10, y: 10 },
-            { x: 10, y: 11 },
-        ], cols, rows));
+        setFood(getRandomCoordinate(snake));
     };
 
     const resetGame = () => {
@@ -159,7 +143,7 @@ const SnakeGame = () => {
             { x: 10, y: 10 },
             { x: 10, y: 11 },
         ]);
-        setFood(getRandomCoordinate(snake, cols, rows));
+        setFood(getRandomCoordinate(snake));
         setScore(0);
     };
 
@@ -179,14 +163,18 @@ const SnakeGame = () => {
 
     return (
         <div className="game-container">
-
+            {gameOver && (
+                <div className="game-over-message">
+                    Game Over Your score was: {score}
+                </div>
+            )}
             <div
                 ref={gameContainerRef}
                 tabIndex={0}
                 onKeyDown={handleKeyDown}
                 style={{
-                    width: "100%",
-                    height: `${rows * cellSize}px`,
+                    width: COLS * CELL_SIZE,
+                    height: ROWS * CELL_SIZE,
                     position: "relative",
                     overflow: "hidden",
                     outline: "solid 6px blue",
@@ -198,39 +186,45 @@ const SnakeGame = () => {
                         key={index}
                         className="snake-segment"
                         style={{
-                            top: segment.y * cellSize,
-                            left: segment.x * cellSize,
-                            width: cellSize,
-                            height: cellSize,
+                            top: segment.y * CELL_SIZE,
+                            left: segment.x * CELL_SIZE,
+                            width: CELL_SIZE,
+                            height: CELL_SIZE,
                         }}
                     />
                 ))}
                 <div
                     className="food"
                     style={{
-                        top: food.y * cellSize,
-                        left: food.x * cellSize,
-                        width: cellSize,
-                        height: cellSize,
+                        top: food.y * CELL_SIZE,
+                        left: food.x * CELL_SIZE,
+                        width: CELL_SIZE,
+                        height: CELL_SIZE,
                     }}
                 />
             </div>
 
-           <div className="controls">
+            <div className="controls">
                 <div className="controls-row">
-                    <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
+                    <button onClick={() => handleDirectionChange(Direction.UP)}>
+                        <i className="fas fa-arrow-up"></i>
+                    </button>
                 </div>
                 <div className="controls-row">
-                    <button onClick={() => handleDirectionChange(Direction.LEFT)}>Left</button>
-                    {isGameStarted || gameOver ? (
-                        <button onClick={resetGame}>Reset Game</button>
-                    ) : (
-                        <button onClick={startGame}>Start Game</button>
-                    )}
-                    <button onClick={() => handleDirectionChange(Direction.RIGHT)}>Right</button>
+                    <button onClick={() => handleDirectionChange(Direction.LEFT)}>
+                        <i className="fas fa-arrow-left"></i>
+                    </button>
+                    <button onClick={isGameStarted || gameOver ? resetGame : startGame}>
+                        {isGameStarted || gameOver ? "Reset" : "Start"}
+                    </button>
+                    <button onClick={() => handleDirectionChange(Direction.RIGHT)}>
+                        <i className="fas fa-arrow-right"></i>
+                    </button>
                 </div>
                 <div className="controls-row">
-                    <button onClick={() => handleDirectionChange(Direction.DOWN)}>Down</button>
+                    <button onClick={() => handleDirectionChange(Direction.DOWN)}>
+                        <i className="fas fa-arrow-down"></i>
+                    </button>
                 </div>
                 <p>Score: {score}</p>
             </div>
