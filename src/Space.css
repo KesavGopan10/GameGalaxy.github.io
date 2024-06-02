@@ -68,3 +68,32 @@ button:hover {
   text-align: center;
   z-index: 1;
 }
+.controls {
+  display: flex;
+  flex-direction: row; /* Display buttons in a single column */
+  align-items: center;
+  justify-content: center; /* Align buttons at the center horizontally */
+  margin-top: 20px;
+}
+
+.control-button {
+  background: #444;
+  border: 2px solid #fff;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px 0; /* Add margin between buttons vertically */
+}
+
+.control-button:active {
+  background: #888;
+}
+
+@media (max-width: 600px) {
+  .control-button {
+      padding: 8px 16px;
+      font-size: 14px;
+  }
+}
