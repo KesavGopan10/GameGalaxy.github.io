@@ -79,7 +79,7 @@ const SnakeGame = () => {
             const interval = setInterval(() => moveSnake(), 180);
             return () => clearInterval(interval);
         }
-    }, [snake, isGameStarted, direction]);
+    }, [isGameStarted, direction]);
 
     useEffect(() => {
         gameContainerRef.current?.focus();
@@ -179,11 +179,11 @@ const SnakeGame = () => {
 
     return (
         <div className="game-container">
-            // {gameOver && (
-            //     <div style={{ color: "red", marginTop: "10px" }}>
-            //         Game Over! Your score was: {score}
-            //     </div>
-            // )}
+            {gameOver && (
+                <div style={{ color: "red", marginTop: "10px" }}>
+                    Game Over! Your score was: {score}
+                </div>
+            )}
             <div style={{ marginTop: "20px" }}>
                 {!isGameStarted && !gameOver && (
                     <button onClick={startGame}>Start Game</button>
@@ -228,8 +228,7 @@ const SnakeGame = () => {
                     }}
                 />
             </div>
-
-           <div className="controls">
+            <div className="controls">
                 <div className="controls-row">
                     <button onClick={() => handleDirectionChange(Direction.UP)}>Up</button>
                 </div>
