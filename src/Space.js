@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Space.css';
+import eatSound from './sounds/shoot.mp3';
+import gameOverSound from './sounds/gameover.mp3';
 
 const Spaces = () => {
   const [gameState, setGameState] = useState('start'); // 'start', 'playing', 'gameover'
@@ -7,6 +9,9 @@ const Spaces = () => {
   const [bullets, setBullets] = useState([]);
   const [enemies, setEnemies] = useState([]);
   const [score, setScore] = useState(0);
+
+  const eatAudio = new Audio(eatSound);
+  const gameOverAudio = new Audio(gameOverSound);
 
   useEffect(() => {
     if (gameState !== 'playing') return;
@@ -34,14 +39,27 @@ const Spaces = () => {
     if (gameState !== 'playing') return;
 
     if (e.key === 'ArrowLeft' && ship.x > 0) {
-      setShip((prevShip) => ({ ...prevShip, x: prevShip.x - 5 }));
+      moveShip('left');
     }
     if (e.key === 'ArrowRight' && ship.x < 95) {
-      setShip((prevShip) => ({ ...prevShip, x: prevShip.x + 5 }));
+      moveShip('right');
     }
     if (e.key === ' ') {
-      setBullets((prevBullets) => [...prevBullets, { x: ship.x + 2.5, y: ship.y }]);
+      shoot();
     }
+  };
+
+  const moveShip = (direction) => {
+    if (direction === 'left' && ship.x > 0) {
+      setShip((prevShip) => ({ ...prevShip, x: prevShip.x - 5 }));
+    }
+    if (direction === 'right' && ship.x < 95) {
+      setShip((prevShip) => ({ ...prevShip, x: prevShip.x + 5 }));
+    }
+  };
+
+  const shoot = () => {
+    setBullets((prevBullets) => [...prevBullets, { x: ship.x + 2.5, y: ship.y }]);
   };
 
   const checkCollisions = () => {
@@ -59,6 +77,7 @@ const Spaces = () => {
             prevEnemies.filter((enemy) => enemy !== collidedEnemy)
           );
           setScore((prevScore) => prevScore + 10);
+          eatAudio.play();
           return false;
         }
         return true;
@@ -74,6 +93,7 @@ const Spaces = () => {
     );
     if (collidedEnemy) {
       setGameState('gameover');
+      gameOverAudio.play();
     }
   };
 
@@ -136,6 +156,17 @@ const Spaces = () => {
           enemies.map((enemy, index) => (
             <Enemy key={index} position={enemy} />
           ))}
+      </div>
+      <div className="controls">
+        <button className="control-button" onClick={() => moveShip('left')}>
+          Left
+        </button>
+        <button className="control-button" onClick={shoot}>
+          Shoot
+        </button>
+        <button className="control-button" onClick={() => moveShip('right')}>
+          Right
+        </button>
       </div>
     </div>
   );
