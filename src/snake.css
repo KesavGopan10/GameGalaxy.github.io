@@ -150,8 +150,8 @@
 /* Styles for smaller screens */
 @media (max-width: 600px) {
     .game-container {
-        width: 110vw;
-        height: 130vw;
+        width: 100vw;
+        height: 300vw;
     }
 
     .snake-segment, .food {
@@ -164,4 +164,58 @@
         height: 40px;
         font-size: 14px;
     }
+}
+@media (max-width: 300px) {
+    .game-container {
+        width:90vw;
+        height: 300vw;
+    }
+
+    .snake-segment, .food {
+        width: 5vw;
+        height: 5vw;
+    }
+
+    .controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+}
+@media (max-width: 200px) {
+    .game-container {
+        width: 100vw;
+        height: 300vw;
+    }
+
+    .snake-segment, .food {
+        width: 5vw;
+        height: 5vw;
+    }
+
+    .controls button {
+        width: 40px;
+        height: 40px;
+        font-size: 14px;
+    }
+}
+
+.controls>.score {
+    font-size: 24px;
+    font-weight: bold;
+    margin-right: 10px;
+    margin-left: 10px;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    text-align: center;
+    position: relative;
+    top: 50%;
+    transform: translateY(1000%);
+    display: inline-block;
+    vertical-align: middle;
+    left:-50;
+    right:-50;
+    transform: translateX(-150%);
+    justify-content: center;
+    align-items: center;
 }
