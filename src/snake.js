@@ -205,27 +205,23 @@ const SnakeGame = () => {
             </div>
 
             <div className="controls">
+                <button className="left" onClick={() => handleDirectionChange(Direction.LEFT)}>
+                    <i className="fas fa-arrow-left"></i>
+                </button>
                 <div className="controls-row">
-                    <button onClick={() => handleDirectionChange(Direction.UP)}>
+                    <button className="up" onClick={() => handleDirectionChange(Direction.UP)}>
                         <i className="fas fa-arrow-up"></i>
                     </button>
-                </div>
-                <div className="controls-row">
-                    <button onClick={() => handleDirectionChange(Direction.LEFT)}>
-                        <i className="fas fa-arrow-left"></i>
-                    </button>
-                    <button onClick={isGameStarted || gameOver ? resetGame : startGame}>
+                    <button className="center" onClick={isGameStarted || gameOver ? resetGame : startGame}>
                         {isGameStarted || gameOver ? "Reset" : "Start"}
                     </button>
-                    <button onClick={() => handleDirectionChange(Direction.RIGHT)}>
-                        <i className="fas fa-arrow-right"></i>
-                    </button>
-                </div>
-                <div className="controls-row">
-                    <button onClick={() => handleDirectionChange(Direction.DOWN)}>
+                    <button className="down" onClick={() => handleDirectionChange(Direction.DOWN)}>
                         <i className="fas fa-arrow-down"></i>
                     </button>
                 </div>
+                <button className="right" onClick={() => handleDirectionChange(Direction.RIGHT)}>
+                    <i className="fas fa-arrow-right"></i>
+                </button>
                 <p>Score: {score}</p>
             </div>
         </div>
