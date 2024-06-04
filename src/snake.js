@@ -5,7 +5,7 @@ import gameOverSound from "./sounds/over.wav";
 
 const ROWS = 20;
 const COLS = 20;
-const CELL_SIZE = 20;
+const CELL_SIZE = 18;
 
 const Direction = {
     UP: "UP",
