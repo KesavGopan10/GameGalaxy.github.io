@@ -222,7 +222,7 @@ const SnakeGame = () => {
                 <button className="right" onClick={() => handleDirectionChange(Direction.RIGHT)}>
                     <i className="fas fa-arrow-right"></i>
                 </button>
-                <p>Score: {score}</p>
+                <p className="score">Score: {score}</p>
             </div>
         </div>
     );
