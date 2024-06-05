@@ -97,3 +97,21 @@ button:hover {
       font-size: 14px;
   }
 }
+@media (max-width: 500px) {
+  .control-button {
+      padding: 8px 16px;
+      font-size: 14px;
+  }
+}
+@media (max-width: 400px) {
+  .control-button {
+      padding: 8px 16px;
+      font-size: 14px;
+  }
+}
+@media (max-width: 300px) {
+  .control-button {
+      padding: 8px 16px;
+      font-size: 14px;
+  }
+}
